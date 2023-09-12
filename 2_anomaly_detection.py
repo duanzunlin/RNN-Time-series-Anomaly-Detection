@@ -1,3 +1,4 @@
+import os
 import argparse
 import torch
 import pickle
@@ -47,8 +48,8 @@ torch.cuda.manual_seed(args.seed)
 # Load data
 ###############################################################################
 TimeseriesData = preprocess_data.PickleDataLoad(data_type=args.data,filename=args.filename, augment_test_data=False)
-train_dataset = TimeseriesData.batchify(args,TimeseriesData.trainData[:TimeseriesData.length], bsz=1)
-test_dataset = TimeseriesData.batchify(args,TimeseriesData.testData, bsz=1)
+train_dataset = TimeseriesData.batchify(args, TimeseriesData.trainData[:TimeseriesData.length].clone().detach(), bsz=1)
+test_dataset = TimeseriesData.batchify(args, TimeseriesData.testData.clone().detach(), bsz=1)
 
 
 ###############################################################################
@@ -203,3 +204,4 @@ pickle.dump(precisions, open(str(save_dir.joinpath('precision.pkl')),'wb'))
 pickle.dump(recalls, open(str(save_dir.joinpath('recall.pkl')),'wb'))
 pickle.dump(f_betas, open(str(save_dir.joinpath('f_beta.pkl')),'wb'))
 print('-' * 89)
+
